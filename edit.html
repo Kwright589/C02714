@@ -1,0 +1,75 @@
+<?php
+
+include 'connect.php';
+
+if (isset( $_['submit'] //this implies you called your submit button "submit"
+{
+	//something needs to go here
+}
+else
+{
+	// and here
+}
+
+$updatequery = "UPDATE users SET 
+         firstname =?,
+         surname = ?,
+         email = ?,
+         passsword = ?,
+         Where ID = ?,"
+         
+$stmt = $mysqli->prepare($updatequery);
+
+$stmt->bind_param('sssss', $_POST['fname'], $_POST['sname'],
+$_POST['email'], $_POST['pass'], $_GET['id']);
+         
+      if (!$stmt->execute()){
+          echo "Error: ".$mysqli->error;
+       }
+       else {
+            echo "<p>Record updated succesfully</p>";
+            echo "<a href=\"users.php\".Back</a>";
+       }
+       $mysqli->close();
+       
+       $populatequery = "SELECT	 * from users WHERE ID='".$_GET['id']."'";
+       $result = $mysqli->query ($populatequery);
+       if ($result){
+		   if ($result->num_rows > 0) {
+			   while($row = $result->fetch_assoc())
+			   {
+				   $fn = $row['firstname'];
+				   $sn = $row['surname'];
+				   $em = $row['email'];
+				   $pw = $row['password'];
+				}
+?>
+<h1> Edit record:</h1>
+<form action="edit.php?id=<?php echo $_GET['id']; ?>" method="post" >
+
+<label for="fname"> Firstname</label>
+<input type="text" id="fname" name="fname" value="<?php echo "$fn";
+?>"/><br>
+
+<label for="sname"> Surname</label>
+<input type="text" id="sname" name="sname" value="<?php echo "$sn";
+?>"/><br>
+
+<label for="email"> Email</label>
+<input type="text" id="email" name="email" value="<?php echo "$em";
+?>"/><br>
+
+<label for="password"> Password</label>
+<input type="text" id="pass" name="pass" value="<?php echo "$pw";
+?>"/><br>
+
+<input type="submit" id="submit" name="submit" value="submit"/>
+</form>
+</body>
+</html>
+<?php
+} //this bracket closes the one that opened at if ($result)
+?>
+
+
+
