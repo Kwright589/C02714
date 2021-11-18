@@ -8,7 +8,7 @@ if ($_server['REQUEST_METHOD'] == 'POST' )
 }
 else {
 	$sql = "insert into users (firstname, surname, email, password) values (
-	'" .$_POST['fname']." ',;" .$_POST['sname']."','".$_POST['email']."','".$_POST['pass']."')";
+	'" .$_POST['fname']." ',;" .$_POST['sname']."','".$_POST['email']."','".$Hashedpassword = password_hash($_POST['password'],PASSWORD_DEFAULT)."')";
 	
 	if(!$mysqli->query($sql)) {
 		echo "Error:".$mysqli->error;

@@ -21,7 +21,7 @@ $updatequery = "UPDATE users SET
 $stmt = $mysqli->prepare($updatequery);
 
 $stmt->bind_param('sssss', $_POST['fname'], $_POST['sname'],
-$_POST['email'], $_POST['pass'], $_GET['id']);
+$_POST['email'], $hashedpassword= password_hash($_POST['password'], PASSWORD_DEFAULT), $_GET['id']);
          
       if (!$stmt->execute()){
           echo "Error: ".$mysqli->error;
