@@ -1,14 +1,48 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit</title>
+</head>
+<body>
+<?php include 'nav.php'?>
+      <div class="container"> 
 
 include 'connect.php';
 
-if (isset( $_['submit'] //this implies you called your submit button "submit"
+if (isset( $_POST['submit'] //this implies you called your submit button "submit"
 {
-	//something needs to go here
+	include 'connect.php';
+
+$ID = $_GET['ID']
+$fn = $_POST['firstname'];
+$sn = $_POST['surname'];
+$em = $_POST['email'];
+
+$updatequery ="UPDATE users SET firstname=?, surname=?, email=?, password=?, WHERE ID=?";
+$stmt = $mysqli->prepare($updatequery);
+$stmt->bind_param('sssss', $fn, $sn, $em, $ID );
+
+if (!stmt->execute()) {
+	echo "<p>Record updated succesfully</p>";
+	echo "<a href=\"display.php\">display</a>";
+}
+$mysqli->close();
+}
+	
 }
 else
 {
-	// and here
+	include 'connect.php';
+	
+	$populatequery = "SELECT * from users WHERE ID=?";
+	$stmt = $mysqli->prepare($populatequery);
+	$stmt->execute();
+	$result = $stmt ->get_result();
+	
+	    $user = $result->fetch_assoc();
+	$fn = $user['firstname']
+	$sn = $user['surname']
+	$em = $user['email'];
 }
 
 $updatequery = "UPDATE users SET 
@@ -31,18 +65,24 @@ $_POST['email'], $hashedpassword= password_hash($_POST['password'], PASSWORD_DEF
             echo "<a href=\"users.php\".Back</a>";
        }
        $mysqli->close();
+}
+else
+{
+	include 'connect.php';
        
-       $populatequery = "SELECT	 * from users WHERE ID='".$_GET['id']."'";
-       $result = $mysqli->query ($populatequery);
-       if ($result){
-		   if ($result->num_rows > 0) {
-			   while($row = $result->fetch_assoc())
-			   {
-				   $fn = $row['firstname'];
-				   $sn = $row['surname'];
-				   $em = $row['email'];
-				   $pw = $row['password'];
-				}
+       $populatequery = "SELECT	 * from users WHERE ID=?;
+       $stmt = $mysqli->preapre ($populatequery);
+       $stmt->bind_param('s', $_GET['id]);
+       $stmt->execute();
+       $result = $stmt-.get_result();
+       
+       $user = $result->fetch_assoc();
+       $fn = $user['firstname'];
+       $sn = $user['surname'];
+       $em = $user['email'];     
+?>
+<?php
+]
 ?>
 <h1> Edit record:</h1>
 <form action="edit.php?id=<?php echo $_GET['id']; ?>" method="post" >
@@ -65,6 +105,7 @@ $_POST['email'], $hashedpassword= password_hash($_POST['password'], PASSWORD_DEF
 
 <input type="submit" id="submit" name="submit" value="submit"/>
 </form>
+</div>
 </body>
 </html>
 <?php
